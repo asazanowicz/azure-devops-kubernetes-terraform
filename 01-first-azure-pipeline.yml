@@ -10,11 +10,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- displayName: 'Run a one-line script' 
-  script: echo Hello, Andriej!
+- script: echo Hello, Andriej!
+  displayName: 'Run a one-line script'
 
-- displayName: 'Run a multi-line script'
-  script: |
+- script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
-
+  displayName: 'Run a multi-line script'
