@@ -37,22 +37,24 @@ module "asazanowicz-cluster" {
 
   #vpc_id         = "vpc-d67be9bf"
 
-  # worker_groups = [
-  #   {
-  #     instance_type = "m4.large"
-  #     asg_max_size  = 3
-  #     min_capacity = 3
-  #   }
-  # ]
-
-  node_groups = [
+  worker_group_count = 1
+  worker_groups = [
     {
-      instance_type = "t2.micro"
-      max_capacity  = 5
-      desired_capacity = 1
-      min_capacity  = 1
+      name                          = "worker-group-1"
+      instance_type                 = "t2.small"
+      additional_userdata           = "echo foo bar"
+      asg_desired_capacity          = 2
     }
   ]
+
+  # node_groups = [
+  #   {
+  #     instance_type = "t2.micro"
+  #     max_capacity  = 5
+  #     desired_capacity = 1
+  #     min_capacity  = 1
+  #   }
+  # ]
 }
 
 data "aws_eks_cluster" "cluster" {
