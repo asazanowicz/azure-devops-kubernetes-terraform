@@ -14,17 +14,17 @@ steps:
     backendServiceAWS: 'aws-for-terraform'
     backendAWSBucketName: 'terraform-backend-state-asazanowicz'
     backendAWSKey: 'k8s-dev.tfstate'
-# - task: TerraformTaskV2@2
-#   displayName: Creating EKS cluster
-#   inputs:
-#     provider: 'aws'
-#     command: 'apply'
-#     workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/aws/kubernetes'
-#     environmentServiceNameAWS: 'aws-for-terraform'
 - task: TerraformTaskV2@2
-  displayName: Destroying EKS cluster
+  displayName: Creating EKS cluster
   inputs:
     provider: 'aws'
-    command: 'destroy'
+    command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/aws/kubernetes'
     environmentServiceNameAWS: 'aws-for-terraform'
+# - task: TerraformTaskV2@2
+#   displayName: Destroying EKS cluster
+#   inputs:
+#     provider: 'aws'
+#     command: 'destroy'
+#     workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/aws/kubernetes'
+#     environmentServiceNameAWS: 'aws-for-terraform'
