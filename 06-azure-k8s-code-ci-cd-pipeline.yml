@@ -13,7 +13,7 @@ stages:
 # Build Docker image
 # Publish K8S Deployment file
 - stage: Build
-  displayName: Build Docker image
+  displayName: Build Docker image and Publishing artifact yaml
   jobs:
   - job: Build
     displayName: Build
@@ -28,7 +28,14 @@ stages:
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
+    - task: CopyFiles@2
+      displayName: Copy *.yaml files
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishBuildArtifacts@1
+      displayName: Publish artifact
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'manifest'
@@ -47,15 +54,17 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: DownloadPipelineArtifact@2
+      displayName: Download atifact *.yaml
       inputs:
         buildType: 'current'
         artifactName: 'manifest'
         itemPattern: '**/*.yaml'
         targetPath: '$(System.ArtifactsDirectory)'
     - task: KubernetesManifest@0
+      displayName: Deploy docker image asazanowicz/currency-exchange-devops:$(tag) to AKS
       inputs:
         action: 'deploy'
         kubernetesServiceConnection: 'azure-k8s-connection'
         namespace: 'default'
-        manifests: '$(System.ArtifactsDirectory)/deployment.yaml'
+        manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
         containers: 'asazanowicz/currency-exchange-devops:$(tag)'
