@@ -28,21 +28,24 @@ provider "kubernetes" {
 }
 
 module "asazanowicz-cluster" {
-  source          = "terraform-aws-modules/eks/aws"
+  source       = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=v12.1.0"
   cluster_name    = "asazanowicz-cluster"
-  cluster_version = "1.17"
+  #cluster_version = "1.17"
   subnets         = ["subnet-18ef7c71", "subnet-7faf1d04"] #CHANGE
   #subnets = data.aws_subnet_ids.subnets.ids
   vpc_id          = aws_default_vpc.default.id
 
   #vpc_id         = "vpc-d67be9bf"
 
-  worker_groups = [
-    {
-      instance_type                 = "t2.micro"
-      asg_desired_capacity          = 2
+  node_groups = {
+    eks_nodes = {
+      desired_capacity = 3
+      max_capacity     = 3
+      min_capaicty     = 3
+
+      instance_type = "t2.micro"
     }
-  ]
+  }
 
   # node_groups = [
   #   {
