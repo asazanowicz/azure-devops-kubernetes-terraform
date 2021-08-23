@@ -30,7 +30,7 @@ provider "kubernetes" {
 module "asazanowicz-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "asazanowicz-cluster"
-  cluster_version = "1.14"
+  cluster_version = "1.17"
   subnets         = ["subnet-18ef7c71", "subnet-7faf1d04"] #CHANGE
   #subnets = data.aws_subnet_ids.subnets.ids
   vpc_id          = aws_default_vpc.default.id
