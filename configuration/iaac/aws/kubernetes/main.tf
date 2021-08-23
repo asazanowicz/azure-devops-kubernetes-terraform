@@ -47,7 +47,7 @@ module "asazanowicz-cluster" {
 
   node_groups = [
     {
-      instance_type = "m4.large" #"t2.micro"
+      instance_type = "t2.micro"
       max_capacity  = 5
       desired_capacity = 1
       min_capacity  = 1
