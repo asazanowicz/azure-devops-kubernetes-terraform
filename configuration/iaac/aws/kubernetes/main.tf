@@ -37,12 +37,9 @@ module "asazanowicz-cluster" {
 
   #vpc_id         = "vpc-d67be9bf"
 
-  worker_group_count = 1
   worker_groups = [
     {
-      name                          = "worker-group-1"
-      instance_type                 = "t2.small"
-      additional_userdata           = "echo foo bar"
+      instance_type                 = "t2.micro"
       asg_desired_capacity          = 2
     }
   ]
