@@ -1,15 +1,13 @@
 # aws --version
 # aws eks --region us-east-1 update-kubeconfig --name in28minutes-cluster
 # Uses default VPC and Subnet. Create Your Own VPC and Private Subnets for Prod Usage.
-# terraform-backend-state-in28minutes-123
-# AKIA4AHVNOD7OOO6T4KI
-
+# terraform-backend-state-asazanowicz
 
 terraform {
   backend "s3" {
     bucket = "mybucket" # Will be overridden from build
     key    = "path/to/my/key" # Will be overridden from build
-    region = "us-east-1"
+    region = "eu-north-1"
   }
 }
 
@@ -29,15 +27,15 @@ provider "kubernetes" {
   version                = "~> 1.9"
 }
 
-module "in28minutes-cluster" {
+module "asazanowicz-cluster" {
   source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = "in28minutes-cluster"
+  cluster_name    = "asazanowicz-cluster"
   cluster_version = "1.14"
-  subnets         = ["subnet-3f7b2563", "subnet-4a7d6a45"] #CHANGE
+  subnets         = ["subnet-18ef7c71", "subnet-7faf1d04"] #CHANGE
   #subnets = data.aws_subnet_ids.subnets.ids
   vpc_id          = aws_default_vpc.default.id
 
-  #vpc_id         = "vpc-1234556abcdef"
+  #vpc_id         = "vpc-d67be9bf"
 
   node_groups = [
     {
@@ -50,11 +48,11 @@ module "in28minutes-cluster" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = module.in28minutes-cluster.cluster_id
+  name = module.asazanowicz-cluster.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.in28minutes-cluster.cluster_id
+  name = module.asazanowicz-cluster.cluster_id
 }
 
 
@@ -79,5 +77,5 @@ resource "kubernetes_cluster_role_binding" "example" {
 
 # Needed to set the default region
 provider "aws" {
-  region  = "us-east-1"
+  region  = "eu-north-1"
 }
