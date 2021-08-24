@@ -34,7 +34,7 @@ stages:
       displayName: Publish manifests
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'manitests'
+        ArtifactName: 'manifests'
         publishLocation: 'Container'
 
 
