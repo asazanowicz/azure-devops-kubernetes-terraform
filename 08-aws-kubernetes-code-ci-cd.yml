@@ -1,0 +1,63 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: 41 
+  #'$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build Docker image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+    - task: CopyFiles@2
+      displayName: Copy deploy.yaml to staging directory
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish manifests
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manitests'
+        publishLocation: 'Container'
+
+
+- stage: Deploy
+  displayName: Deploy Docker image
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download artifacts
+      inputs:
+        buildType: 'current'
+        artifactName: 'manifests'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+    - task: KubernetesManifest@0
+      displayName: Deploy image to AWS EKS [k8s-cluster] 
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'aws-k8s-cluster-service-account'
+        namespace: 'default'
+        manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
+        containers: asazanowicz/currency-exchange-devops:$(tag)
