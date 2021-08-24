@@ -13,8 +13,8 @@ spec:
       app: currency-exchange
   strategy:
     rollingUpdate:
-      # maxSurge: 25%
-      # maxUnavailable: 25%
+      maxSurge: 25%
+      maxUnavailable: 25%
     type: RollingUpdate
   template:
     metadata:

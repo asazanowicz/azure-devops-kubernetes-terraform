@@ -61,4 +61,4 @@ stages:
         namespace: 'default'
         manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
         containers: 'asazanowicz/currency-exchange-devops:$(tag)'
-        rolloutStatusTimeout: '60'
+        rolloutStatusTimeout: '360'
