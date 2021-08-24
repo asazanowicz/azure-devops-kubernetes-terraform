@@ -29,7 +29,7 @@ provider "kubernetes" {
 
 module "asazanowicz-cluster" {
   source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = "asazanowicz-cluster"
+  cluster_name    = "k8s-cluster"
   cluster_version = "1.20"
   subnets         = ["subnet-18ef7c71", "subnet-7faf1d04"] #CHANGE
   #subnets = data.aws_subnet_ids.subnets.ids
@@ -39,9 +39,9 @@ module "asazanowicz-cluster" {
 
   worker_groups = [
     {
-      name                          = "worker-group-1"
-      instance_type                 = "t3.small"
-      additional_userdata           = "echo foo bar"
+      name                          = "k8s-cluster-worker-group-1"
+      instance_type                 = "t3.micro"
+      #additional_userdata           = "echo foo bar"
       asg_desired_capacity          = 2
       #additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
     }
