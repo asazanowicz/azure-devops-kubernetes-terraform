@@ -60,4 +60,5 @@ stages:
         kubernetesServiceConnection: 'aws-k8s-cluster-service-account'
         namespace: 'default'
         manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
-        containers: asazanowicz/currency-exchange-devops:$(tag)
+        containers: 'asazanowicz/currency-exchange-devops:$(tag)'
+        rolloutStatusTimeout: '60'
